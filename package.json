@@ -1,0 +1,16 @@
+{
+  "name": "modbus",
+  "version": "0.0.1",
+  "description": "Byd line 56",
+  "main": "main_v0.0.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hector Buenrostro",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "jsmodbus": "^2.2.0",
+    "pubnub": "^4.15.1"
+  }
+}
