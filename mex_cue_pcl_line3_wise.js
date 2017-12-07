@@ -545,6 +545,7 @@ client2.on('connect', function(err) {
                 }
                 CoderflagPrint = 0
                 CodersecStop = 0
+                Codertime = Date.now()
               }
         //------------------------------------------Coder----------------------------------------------
         //------------------------------------------Labeller----------------------------------------------
@@ -615,6 +616,7 @@ client2.on('connect', function(err) {
                 }
                 LabellerflagPrint = 0
                 LabellersecStop = 0
+                Labellertime = Date.now()
               }
         //------------------------------------------Labeller----------------------------------------------
               });//Cierre de lectura
@@ -697,6 +699,7 @@ client2.on('connect', function(err) {
                 }
                 CaseFormerflagPrint = 0
                 CaseFormersecStop = 0
+                CaseFormertime = Date.now()
               }
         //------------------------------------------CaseFormer----------------------------------------------
         //------------------------------------------CasePacker----------------------------------------------
