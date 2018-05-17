@@ -441,6 +441,7 @@ try {
 										//Desactivar alamras
 										fs.appendFileSync('alarms.log', 'Alarm delta solved Filler at ' + eval(new Date()).toString() + '\n')
 										FillerReject.alarm = false
+										FillerReject.count = 0
 										FillerdeltaRejected = CntInFiller - CntOutFiller - FillerReject.rejected
 									} else if (FillerReject.alarm) {
 										FillerdeltaRejected = null
