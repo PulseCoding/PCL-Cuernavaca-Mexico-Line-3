@@ -20,45 +20,43 @@ try {
 		BottleSortertimeStop = 60, //NOTE: Timestop
 		BottleSorterWorktime = 0.98,
 		BottleSorterflagRunning = false;
-var Fillerct = null,
-	Fillerresults = null,
-	CntInFiller = null,
-	CntOutFiller = null,
-	Filleractual = 0,
-	Fillertime = 0,
-	Fillersec = 0,
-	FillerflagStopped = false,
-	Fillerstate = 0,
-	Fillerspeed = 0,
-	FillerspeedTemp = 0,
-	FillerflagPrint = 0,
-	FillersecStop = 0,
-	FillerdeltaRejected = null,
-	FillerONS = false,
-	FillertimeStop = 60, //NOTE: Timestop
-	FillerWorktime = 0.95, //NOTE: Intervalo de tiempo en minutos para actualizar el log
-	FillerflagRunning = false,
-	FillerRejectFlag = false,
-	FillerReject,
-	FillerVerify = (function() {
-		try {
-			FillerReject = fs.readFileSync('FillerRejected.json')
-			if (FillerReject.toString().indexOf('}') > 0 && FillerReject.toString().indexOf('{\"rejected\":') != -1) {
-				FillerReject = JSON.parse(FillerReject)
-			} else {
-				throw 12121212
-			}
-		} catch (err) {
-			if (err.code == 'ENOENT' || err == 12121212) {
-				FillerReject = {
-					rejected: null,
-					lastCPQI: null,
-					lastCPQO: null,
-					alarm: false
+	var Fillerct = null,
+		Fillerresults = null,
+		CntInFiller = null,
+		CntOutFiller = null,
+		Filleractual = 0,
+		Fillertime = 0,
+		Fillersec = 0,
+		FillerflagStopped = false,
+		Fillerstate = 0,
+		Fillerspeed = 0,
+		FillerspeedTemp = 0,
+		FillerflagPrint = 0,
+		FillersecStop = 0,
+		FillerdeltaRejected = null,
+		FillerONS = false,
+		FillertimeStop = 60, //NOTE: Timestop
+		FillerWorktime = 0.99, //NOTE: Intervalo de tiempo en minutos para actualizar el log
+		FillerflagRunning = false,
+		FillerRejectFlag = false,
+		FillerReject,
+		FillerVerify = (function() {
+			try {
+				FillerReject = fs.readFileSync('FillerRejected.json')
+				if (FillerReject.toString().indexOf('}') > 0 && FillerReject.toString().indexOf('{\"rejected\":') != -1) {
+					FillerReject = JSON.parse(FillerReject)
+				} else {
+					throw 12121212
+				}
+			} catch (err) {
+				if (err.code == 'ENOENT' || err == 12121212) {
+					fs.writeFileSync('FillerRejected.json', '{"rejected":0}') //NOTE: Change the object to what it usually is.
+					FillerReject = {
+						rejected: 0
+					}
 				}
 			}
-		}
-	})();
+		})()
 	var BallDispenser = 0,
 		CapDispenser = 0;
 	var Coderct = null,
@@ -396,13 +394,6 @@ try {
 						Fillersec = Date.now()
 						FillerONS = true
 						Fillertime = Date.now()
-						if (FillerReject.rejected == null) {
-							FillerReject.rejected = CntInFiller - CntOutFiller
-							FillerReject.lastCPQI = CntInFiller
-							FillerReject.lastCPQO = CntOutFiller
-							FillerReject.count = 0
-							fs.writeFileSync('FillerRejected.json', JSON.stringify(FillerReject))
-						}
 					}
 					if (Fillerct > Filleractual) {
 						if (FillerflagStopped) {
@@ -429,43 +420,9 @@ try {
 							FillerflagStopped = true
 							FillerflagRunning = false
 							if (CntInFiller - CntOutFiller - FillerReject.rejected != 0 && !FillerRejectFlag) {
-								if (FillerReject.lastCPQI == CntInFiller || FillerReject.lastCPQO == CntOutFiller) {
-									FillerdeltaRejected = null
-									if (!FillerReject.alarm) {
-										//Enviar alarma aquí
-										FillerReject.alarm = true
-										fs.appendFileSync('alarms.log', 'Alarm static counters Filler at ' + eval(new Date()).toString() + '\n')
-									}
-								} else if (FillerReject.count > 3) {
-									if ((CntInFiller - CntOutFiller - FillerReject.rejected) > 0 && Fillerct.alarm) {
-										//Desactivar alamras
-										fs.appendFileSync('alarms.log', 'Alarm delta solved Filler at ' + eval(new Date()).toString() + '\n')
-										FillerReject.alarm = false
-										FillerReject.count = 0
-										FillerdeltaRejected = CntInFiller - CntOutFiller - FillerReject.rejected
-									} else if (FillerReject.alarm) {
-										FillerdeltaRejected = null
-									} else if (!FillerReject.alarm) {
-										//Enviar alarmas
-										fs.appendFileSync('alarms.log', 'Alarm negative delta Filler at ' + eval(new Date()).toString() + '\n')
-										FillerReject.alarm = true
-									}
-								} else {
-									FillerdeltaRejected = CntInFiller - CntOutFiller - FillerReject.rejected
-									if (FillerdeltaRejected < 0) {
-										FillerReject.count++
-									}
-									if (Fillerct.alarm) {
-										//Desactivar alarma
-										fs.appendFileSync('alarms.log', 'Alarm statis sensors solved Filler at ' + eval(new Date()).toString() + '\n')
-										FillerReject.alarm = false
-									}
-								}
-								FillerReject.lastCPQI = CntInFiller
-								FillerReject.lastCPQO = CntOutFiller
+								FillerdeltaRejected = CntInFiller - CntOutFiller - FillerReject.rejected
 								FillerReject.rejected = CntInFiller - CntOutFiller
-								fs.appendFileSync('test.log', JSON.stringify(FillerReject) + '\n')
-								fs.writeFileSync('FillerRejected.json', JSON.stringify(FillerReject))
+								fs.writeFileSync('FillerRejected.json', '{"rejected": ' + FillerReject.rejected + '}')
 								FillerRejectFlag = true
 							} else {
 								FillerdeltaRejected = null
