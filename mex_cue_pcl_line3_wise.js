@@ -444,7 +444,6 @@ try {
 						ST: Fillerstate,
 						CPQI: CntInFiller,
 						CPQO: CntOutFiller,
-						CPQR: FillerdeltaRejected,
 						SP: Fillerspeed
 					}
 					if (FillerflagPrint == 1) {
@@ -534,7 +533,6 @@ try {
 					ST: Coderstate,
 					CPQI: CntInCoder,
 					CPQO: CntOutCoder,
-					CPQR: CoderdeltaRejected,
 					SP: Coderspeed
 				}
 				if (CoderflagPrint == 1) {
@@ -605,7 +603,6 @@ try {
 					ST: Labellerstate,
 					CPQI: CntInLabeller,
 					CPQO: CntOutLabeller,
-					CPQR: LabellerdeltaRejected,
 					SP: Labellerspeed
 				}
 				if (LabellerflagPrint == 1) {
@@ -759,7 +756,6 @@ try {
 					ST: CasePackerstate,
 					CPQI: CntInCasePacker,
 					CPQO: CntOutCasePacker,
-					//CPQR : CasePackerdeltaRejected,
 					SP: CasePackerspeed
 				}
 				if (CasePackerflagPrint == 1) {
@@ -822,7 +818,6 @@ try {
 					ST: CheckWeigherstate,
 					CPQI: CntInCheckWeigher,
 					CPQO: CntOutCheckWeigher,
-					CPQR: CntRejCheckWeigher,
 					SP: CheckWeigherspeed
 				}
 				if (CheckWeigherflagPrint == 1) {
